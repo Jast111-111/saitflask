@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="tabs">
+        <div class="tab-header">
+            {% for tab in tabs %}
+                <div class="tab-btn {% if loop.first %}active{% endif %}"
+                     onclick="openTab('{{ tab.id }}')">{{ tab.title }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="tab-content">
+            {% for tab in tabs %}
+                <div id="{{ tab.id }}" class="tab-pane {% if loop.first %}active{% endif %}">
+                    {% if tab.id == 'gallery' %}
+                        <div class="gallery">
+                            {% for image in tab.content %}
+                                <img src="{{ url_for('static', filename=image) }}" alt="Изображение {{ loop.index }}">
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p>{{ tab.content }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabId) {
+            // Скрыть все вкладки
+            document.querySelectorAll('.tab-pane').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Убрать активный класс у всех кнопок
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Показать выбранную вкладку
+            document.getElementById(tabId).classList.add('active');
+
+            // Сделать кнопку активной
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+{% endblock %}
